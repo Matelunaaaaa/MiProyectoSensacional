@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Animals</title>
+
+    <style>
+        /* Esto pone el fondo con una imagen de la carpeta img */
+        body{
+        
+        background-image: url('img/Presentación\ etología\ y\ adiestramiento\ canino\ ilustraciones\ divertidas\ tonos\ crema\ \ pastel.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        }
+
+   
+        .carousel-inner img {
+          width: 100%;
+          height: 550px;
+          object-fit: cover;
+        }
+    
+
+    </style>
+</head>
+<body class="tema">
+    <!-- carga del header -->    
+    <div id="headerContent"></div>
+
+    <div>
+        <div class="container mt-5">
+            <div class="d-flex justify-content-center" style="margin-top: 18%;">
+              <!-- Carrusel -->
+              <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="max-width: 800px;">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="img/perritofachero.avif" class="d-block w-100" alt="Slide 1">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="img/losminions.jpg" class="d-block w-100" alt="Slide 2">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="img/perro-disfrazado.jpg" class="d-block w-100" alt="Slide 3">
+                  </div>
+                </div>
+                <!-- Controles del carrusel -->
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Siguiente</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Incluimos jQuery y Bootstrap JS -->
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+          <script src="index.js"></script>
+
+    </div>
+    
+</body>
+</html>
