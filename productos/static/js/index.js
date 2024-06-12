@@ -57,3 +57,31 @@ form.addEventListener("submit", e=>{
         problema.value = ""
     }
 })
+
+
+    
+document.addEventListener("DOMContentLoaded", () => {
+  const contenido = document.getElementById("contenido");
+
+  // URL de la API
+  const url = "https://api.thedogapi.com/v1/breeds";
+
+  // Llamada a la API utilizando fetch
+  fetch(url)
+      .then(response => response.json())
+      .then(data => {
+          // Procesar los datos recibidos de la API
+          let output = "<ul>";
+          data.forEach(breed => {
+              output += `<li><strong>${breed.name}</strong></li>`;
+          });
+          output += "</ul>";
+
+          // Mostrar los datos en el HTML
+          contenido.innerHTML = output;
+      })
+      .catch(error => {
+          console.error("Error al llamar a la API:", error);
+          contenido.innerHTML = "Ocurrió un error al obtener los datos.";
+      });
+});
