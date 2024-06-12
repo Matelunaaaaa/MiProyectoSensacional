@@ -17,3 +17,7 @@ def ayuda(request):
 def catalogo(request):
     context={}
     return render(request, 'catalogo.html', context)
+
+def razas(request):
+    context={}
+    return render(request, 'razas.html', context)
