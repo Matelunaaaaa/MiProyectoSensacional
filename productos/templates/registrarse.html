@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'css/principal.css' %}">
+</head>
+<body>
+    <div id="headerContent"></div>
+
+    <h1 style="text-align: center;">Registrarse</h1>
+
+    <form action="registro" method="post" style="text-align: center;">
+        {% csrf_token %}
+        <pre>Correo Electronico        <input type="text" name="correo"></pre>
+        <pre>Nombre                    <input type="text" name="nombre"></pre>
+        <pre>Apellido paterno          <input type="text" name="apaterno"></pre>
+        <pre>Apellido Materno          <input type="text" name="amaterno"></pre>
+        <pre>Contraseña                <input type="password" name="contraseña"></pre>
+        <pre>Genero                    <select name="genero">
+            {% for genero in generos %}
+                <option value="{{genero.id_genero}}">{{genero.genero}}</option>
+            {% endfor %}
+        </select></pre>
+        <input type="submit" name="opcion" value="Registrarse">
+    </form><br><br>
+    <br>
+    <div id="mensaje">
+        {% if mensaje %}
+        {{mensaje}}
+        {% endif %}
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+</html>
