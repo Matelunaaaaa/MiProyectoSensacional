@@ -5,15 +5,14 @@ from .forms import UsuariosForm
 # Create your views here.
 
 def Principal(request, pk):
-    #context={}
-    #return render(request, 'Principal.html', context)
     usuario = get_object_or_404(Usuarios, pk=pk)
     return render(request, 'Principal.html', {'usuario': usuario})
 
 
-def InicioSesion(request):
-    context={}
-    return render(request, 'InicioSesion.html', context)
+
+def InicioSesion(request,pk):
+    usuario = get_object_or_404(Usuarios, pk=pk)
+    return render(request, 'InicioSesion.html', {'usuario': usuario})
 
 def ayuda(request):
     context={}
@@ -36,15 +35,15 @@ def usuario_detail(request, pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
     return render(request, 'usuario_detail.html', {'usuario': usuario})
 
-def usuario_create(request):
+def registrarse(request):
     if request.method == 'POST':
         form = UsuariosForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('usuario_list')
+            return redirect('Principal/0/')
     else:
         form = UsuariosForm()
-    return render(request, 'usuario_form.html', {'form': form})
+    return render(request, 'Principal.html', {'form': form})
 
 def usuario_update(request, pk):
     usuario = get_object_or_404(Usuarios, pk=pk)

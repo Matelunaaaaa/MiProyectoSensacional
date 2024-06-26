@@ -12,6 +12,7 @@
 </head>
 <body>
     <div id="headerContent"></div>
+    <input type="hidden" id="id_usuario" value="{{ usuario.id }}" text="{{ usuario.id }}">
 
     <h1 style="text-align: center;">Registrarse</h1>
 
@@ -23,9 +24,9 @@
         <pre>Apellido Materno          <input type="text" name="amaterno"></pre>
         <pre>Contraseña                <input type="password" name="contraseña"></pre>
         <pre>Genero                    <select name="genero">
-            {% for genero in generos %}
-                <option value="{{genero.id_genero}}">{{genero.genero}}</option>
-            {% endfor %}
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">TanqueApache</option>
         </select></pre>
         <input type="submit" name="opcion" value="Registrarse">
     </form><br><br>
