@@ -8,28 +8,116 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    <link rel="stylesheet" href="{% static 'css/principal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/registrarse.css' %}">
 </head>
 <body>
     <div id="headerContent"></div>
     <input type="hidden" id="id_usuario" value="{{ usuario.id }}" text="{{ usuario.id }}">
 
-    <h1 style="text-align: center;">Registrarse</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center" style="margin-top: 10%;">
+            <form class="col-md-6" id="usuariosForm">  
+                {% csrf_token %}
+                <div class="card"> 
+                    <div class="card-header">
+                        <h3 class="card-title text-center">
+                            Registrarse
+                        </h3>
+                    </div>
 
-    <form action="registro" method="post" style="text-align: center;">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="correo_electronico">Correo Electrónico:</label>
+                            <input type="email" id="correo_electronico" name="correo_electronico" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="apellido_paterno">Apellido Paterno:</label>
+                            <input type="text" id="apellido_paterno" name="apellido_paterno" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="apellido_materno">Apellido Materno:</label>
+                            <input type="text" id="apellido_materno" name="apellido_materno" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contraseña">Contraseña:</label>
+                            <input type="password" id="contraseña" name="contraseña" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="genero">Género:</label>
+                            <select id="genero" name="genero" class="form-control" required>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                                <option value="O">Otro</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="mr-3">Guardar</button>
+                        <div id="mensaje"></div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <!---<form id="usuariosForm">
         {% csrf_token %}
-        <pre>Correo Electronico        <input type="text" name="correo"></pre>
-        <pre>Nombre                    <input type="text" name="nombre"></pre>
-        <pre>Apellido paterno          <input type="text" name="apaterno"></pre>
-        <pre>Apellido Materno          <input type="text" name="amaterno"></pre>
-        <pre>Contraseña                <input type="password" name="contraseña"></pre>
-        <pre>Genero                    <select name="genero">
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-                <option value="O">TanqueApache</option>
-        </select></pre>
-        <input type="submit" name="opcion" value="Registrarse">
-    </form><br><br>
+        <label for="correo_electronico">Correo Electrónico:</label>
+        <input type="email" id="correo_electronico" name="correo_electronico" required><br><br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        <label for="apellido_paterno">Apellido Paterno:</label>
+        <input type="text" id="apellido_paterno" name="apellido_paterno" required><br><br>
+<br><br>
+        <label for="contraseña">Contraseña:</label>
+        <input type="password" id="contraseña" name="contraseña" required><br><br>
+        <label for="genero">Género:</label>
+        <select id="genero" name="genero" required>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+            <option value="O">Otro</option>
+        </select><br><br>
+        <button type="submit">Guardar</button>
+    </form> --->
+    
+
+    <script>
+        document.getElementById('usuariosForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+
+            fetch("{% url 'usuario_create' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('mensaje').innerText = "Usuario guardado exitosamente.";
+                } else {
+                    document.getElementById('mensaje').innerText = "Error al guardar usuario.";
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <br>
+    <br>
     <br>
     <div id="mensaje">
         {% if mensaje %}
