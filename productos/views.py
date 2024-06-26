@@ -15,20 +15,20 @@ def InicioSesion(request,pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
     return render(request, 'InicioSesion.html', {'usuario': usuario})
 
-def ayuda(request):
-    context={}
-    return render(request, 'ayuda.html', context)
+def ayuda(request, pk):
+    usuario = get_object_or_404(Usuarios, pk=pk)
+    return render(request, 'ayuda.html', {'usuario': usuario})
 
-def catalogo(request):
-    context={}
-    return render(request, 'catalogo.html', context)
+def catalogo(request, pk):
+    usuario = get_object_or_404(Usuarios, pk=pk)
+    return render(request, 'catalogo.html', {'usuario': usuario})
 
-def razas(request):
-    context={}
-    return render(request, 'razas.html', context)
+def razas(request, pk):
+    usuario = get_object_or_404(Usuarios, pk=pk)
+    return render(request, 'razas.html', {'usuario': usuario})
 
 
-def usuario_list(request):
+def usuario_list(request, pk):
     usuarios = Usuarios.objects.all()
     return render(request, 'usuario_list.html', {'usuarios': usuarios})
 
@@ -37,9 +37,9 @@ def usuario_detail(request, pk):
     return render(request, 'usuario_detail.html', {'usuario': usuario})
 
 @csrf_exempt
-def registrarse(request):
-    context={}
-    return render(request, 'registrarse.html', context)
+def registrarse(request, pk):
+    usuario = get_object_or_404(Usuarios, pk=pk)
+    return render(request, 'registrarse.html', {'usuario': usuario})
 
 def usuario_create(request):
     if request.method == 'POST':
