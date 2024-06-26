@@ -8,11 +8,11 @@
     <p>Correo Electrónico: {{ usuario.correo_electronico }}</p>
     <p>Apellido Materno: {{ usuario.apellido_materno }}</p>
     <p>Género: {{ usuario.get_genero_display }}</p>
-    <a href="{% url 'usuario_update' usuario.pk %}">Editar</a>
-    <form action="{% url 'usuario_delete' usuario.pk %}" method="post">
+    <a href="{ %}">Editar</a>
+    <form action="" method="post">
         {% csrf_token %}
         <button type="submit">Eliminar</button>
     </form>
-    <a href="{% url 'usuario_list' %}">Volver a la lista</a>
+    <a href="">Volver a la lista</a>
 </body>
 </html>

@@ -4,9 +4,12 @@ from .forms import UsuariosForm
 
 # Create your views here.
 
-def Principal(request):
-    context={}
-    return render(request, 'Principal.html', context)
+def Principal(request, pk):
+    #context={}
+    #return render(request, 'Principal.html', context)
+    usuario = get_object_or_404(Usuarios, pk=pk)
+    return render(request, 'Principal.html', {'usuario': usuario})
+
 
 def InicioSesion(request):
     context={}
@@ -27,11 +30,11 @@ def razas(request):
 
 def usuario_list(request):
     usuarios = Usuarios.objects.all()
-    return render(request, 'myapp/usuario_list.html', {'usuarios': usuarios})
+    return render(request, 'usuario_list.html', {'usuarios': usuarios})
 
 def usuario_detail(request, pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'myapp/usuario_detail.html', {'usuario': usuario})
+    return render(request, 'usuario_detail.html', {'usuario': usuario})
 
 def usuario_create(request):
     if request.method == 'POST':
@@ -41,7 +44,7 @@ def usuario_create(request):
             return redirect('usuario_list')
     else:
         form = UsuariosForm()
-    return render(request, 'myapp/usuario_form.html', {'form': form})
+    return render(request, 'usuario_form.html', {'form': form})
 
 def usuario_update(request, pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
@@ -52,11 +55,11 @@ def usuario_update(request, pk):
             return redirect('usuario_list')
     else:
         form = UsuariosForm(instance=usuario)
-    return render(request, 'myapp/usuario_form.html', {'form': form})
+    return render(request, 'usuario_form.html', {'form': form})
 
 def usuario_delete(request, pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
     if request.method == 'POST':
         usuario.delete()
         return redirect('usuario_list')
-    return render(request, 'myapp/usuario_confirm_delete.html', {'usuario': usuario})
+    return render(request, 'usuario_confirm_delete.html', {'usuario': usuario})
