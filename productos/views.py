@@ -11,8 +11,6 @@ def Principal(request, pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
     return render(request, 'Principal.html', {'usuario': usuario})
 
-
-
 def InicioSesion(request,pk):
     usuario = get_object_or_404(Usuarios, pk=pk)
     return render(request, 'InicioSesion.html', {'usuario': usuario})
@@ -83,14 +81,23 @@ def usuario_delete(request, pk):
         return redirect('usuario_list')
     return render(request, 'usuario_confirm_delete.html', {'usuario': usuario})
 
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        correo_electronico1 = request.POST.get('correo_electronico')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'error': 'Invalid credentials'})
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+        try:
+            usuario = Usuarios.objects.get(correo_electronico=correo_electronico1)
+        except Usuarios.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'El correo electrónico no está registrado.'})
+
+        if usuario:
+            if usuario.contraseña == password:
+                # Autenticación manual (no usando authenticate de Django)
+                #login(request, usuario)
+                return JsonResponse({'success': True, 'usuario': usuario.id})
+            else:
+                return JsonResponse({'success': False, 'error': 'Contraseña incorrecta.'})
+
+    return JsonResponse({'success': False, 'error': 'Método de solicitud inválido.'})
