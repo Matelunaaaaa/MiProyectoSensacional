@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    <h1>Datos Clientes:</h1>
+    <table>
+        {% if admin %}
+            <th>correo:</th>
+            <th>Nombre:</th>
+            <th>apellido paterno:</th>
+            <th>apellido materno:</th>
+            <th>contraseña:</th>
+            {% for x in admin %}
+                <tr>
+                    <td>{{ x.correo }}
+                    <td>{{ x.nombre }}
+                    <td>{{ x.aparterno }}
+                    <td>{{ x.amaterno }}
+                    <td>{{ x.contraseña }}
+                    <td><a href="{% url 'borrar_cliente' pk=x.correo %}">Eliminar</a>
+                    <td><a href="{% url 'editar_cliente' pk=x.correo %}">Editar</a>
+                    
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+</body>
+</html>

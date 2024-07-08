@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if editar %}
+        <h2>Editar Datos Clientes</h2>
+
+        <form action="{% url 'editarClientes' %}" method="post">
+            {% csrf_token %}
+            <pre>Correo:                        <input type="text" name="correo" value="cliente.correo"></pre>
+            <pre>Nombre:                        <input type="text" name="nombre" value="cliente.nombre"></pre>
+            <pre>Apellido Paterno:              <input type="text" name="aparterno" value="cliente.aparterno"></pre>
+            <pre>Apellido Materno:              <input type="text" name="amaterno" value="cliente.amaterno"></pre>
+            <pre>Contraseña:                    <input type="text" name="contraseña" value="cliente.contraseña"></pre>
+            <pre>Genero:                        <select name="genero">
+
+                {% for genero in generos %}
+
+                    {% if genero.genero == editar.id_genero.genero %}
+                        <option value="{{genero.id_genero}}" selected>{{genero.genero}}</option>
+                    {% else %}
+                        <option value="{{genero.id_genero}}">{{genero.genero}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <input type="submit" name="opcion" value="Editar">
+        </form><br><br>
+    {% endif %}
+    <div id="mensaje">
+        {% if mensaje %}
+            {{mensaje}}
+        {% endif %}
+    </div>
+</body>
+</html>

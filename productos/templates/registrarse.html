@@ -1,101 +1,62 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundo Animals</title>
-    <link rel="stylesheet" href="{% static 'css/principal.css' %}">
+    <title>Document</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'css/principal.css' %}">
 </head>
 <body>
-    <div id="headerContent"></div>
-    <input type="hidden" id="id_usuario" value="{{ usuario.id }}" text="{{ usuario.id }}">
-    <input type="hidden" id="headerpestaña" value="registrarse">
-    <h1 style="text-align: center; display: none;" id="bienvenido">Hola {{ usuario.nombre }} Bienvenido</h1>
-
-    <div class="container mt-5">
-        <div class="row justify-content-center" style="margin-top: 10%;">
-            <form class="col-md-6" id="usuariosForm">  
-                {% csrf_token %}
-                <div class="card"> 
-                    <div class="card-header">
-                        <h3 class="card-title text-center">
-                            Registrarse
-                        </h3>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label for="correo_electronico">Correo Electrónico:</label>
-                            <input type="email" id="correo_electronico" name="correo_electronico" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="apellido_paterno">Apellido Paterno:</label>
-                            <input type="text" id="apellido_paterno" name="apellido_paterno" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="apellido_materno">Apellido Materno:</label>
-                            <input type="text" id="apellido_materno" name="apellido_materno" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="contraseña">Contraseña:</label>
-                            <input type="password" id="contraseña" name="contraseña" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="genero">Género:</label>
-                            <select id="genero" name="genero" class="form-control" required>
-                                <option value="M">Masculino</option>
-                                <option value="F">Femenino</option>
-                                <option value="O">Otro</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="mr-3">Guardar</button>
-                        <div id="mensaje"></div>
-
-                    </div>
-                </div>
-            </form>
-        </div>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+              <a class="navbar-brand" href="#">Mundo Animals</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto"><li class="nav-item active"><a class="nav-link" href="Principal">Inicio</a></li>
+              <li class="nav-item">
+              <a class="nav-link" href="catalogo">Catalogo</a></li><li class="nav-item"><a class="nav-link" href="InicioSesion">Inicio de sesion</a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="ayuda">Ayuda</a>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="razas">Razas</a>
+              </li>
+              <li class="nav-item">{% if user.is_authenticated %}<a class="nav-link btn btn-outline-danger text-danger" href="{% url 'logout' %}">Cerrar Sesión</a>{% else %}<a class="nav-link btn btn-outline-danger text-danger" href=<"http://127.0.0.1:8000/accounts/login/">Iniciar Sesion</a>{% endif %}</li>
+              </ul>>
+              </div>
+              </div>
+              </nav>
     </div>
+    <h1 style="text-align: center;">Registrarse</h1>
 
-    <script>
-        document.getElementById('usuariosForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            let formData = new FormData(this);
-
-            fetch("{% url 'usuario_create' %}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('mensaje').innerText = "Usuario guardado exitosamente.";
-                } else {
-                    document.getElementById('mensaje').innerText = "Error al guardar usuario.";
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
+    <form action="registrarse" method="post" style="text-align: center;">
+        {% csrf_token %}
+        <pre>Correo Electronico        <input type="text" name="correo"></pre>
+        <pre>Nombre                    <input type="text" name="nombre"></pre>
+        <pre>Apellido paterno          <input type="text" name="apaterno"></pre>
+        <pre>Apellido Materno          <input type="text" name="amaterno"></pre>
+        <pre>Contraseña                <input type="password" name="contraseña"></pre>
+        <pre>Genero                    <select name="genero">
+            {% for genero in generos %}
+                <option value="{{genero.id_genero}}">{{genero.genero}}</option>
+            {% endfor %}
+        </select></pre>
+        <input type="submit" name="opcion" value="Registrarse">
+        <button><a href="http://127.0.0.1:8000/accounts/login/">Inicio Sesion</a></button>
+    </form><br><br>
+    
+    <br>
+    <div id="mensaje">
+        {% if mensaje %}
+            {{mensaje}}
+        {% endif %}
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
