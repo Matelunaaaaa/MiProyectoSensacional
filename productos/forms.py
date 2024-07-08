@@ -1,7 +1,5 @@
 from django import forms
-from .models import Usuarios
+from django.contrib.auth.forms import AuthenticationForm
 
-class UsuariosForm(forms.ModelForm):
-    class Meta:
-        model = Usuarios
-        fields = ['correo_electronico', 'nombre', 'apellido_paterno', 'apellido_materno', 'contraseña', 'genero']
+class EmailAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))

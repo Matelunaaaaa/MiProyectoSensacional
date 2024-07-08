@@ -1,103 +1,123 @@
-from django.shortcuts import render , get_object_or_404, redirect
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .models import Usuarios
-from .forms import UsuariosForm
-from django.contrib.auth import authenticate, login
-
+from django.shortcuts import render
+from .models import cliente, Genero
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
+@login_required
+def Principal(request):
+    context={}
+    return render(request, 'Principal.html', context)
 
-def Principal(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'Principal.html', {'usuario': usuario})
+def InicioSesion(request):
+    context={}
+    return render(request, 'InicioSesion.html', context)
+@login_required
+def ayuda(request):
+    context={}
+    return render(request, 'ayuda.html', context)
+@login_required
+def catalogo(request):
+    context={}
+    return render(request, 'catalogo.html', context)
+@login_required
+def razas(request):
+    context={}
+    return render(request, 'razas.html', context)
 
-def InicioSesion(request,pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'InicioSesion.html', {'usuario': usuario})
+def registrarse(request):
+    if request.method != "POST":
+        generos=Genero.objects.all()
+        context={'generos':generos}
+        return render(request, 'registrarse.html', context)
+    
+    else:
+        correo = request.POST['correo']
+        nombre = request.POST['nombre']
+        apaterno = request.POST['apaterno']
+        amaterno = request.POST['amaterno']
+        contraseña = request.POST['contraseña']
+        genero = request.POST['genero']
 
-def ayuda(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'ayuda.html', {'usuario': usuario})
-
-def catalogo(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'catalogo.html', {'usuario': usuario})
-
-def razas(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'razas.html', {'usuario': usuario})
-
-
-def usuario_list(request, pk):
-    usuarios = Usuarios.objects.all()
-    return render(request, 'usuario_list.html', {'usuarios': usuarios})
-
-def usuario_detail(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'usuario_detail.html', {'usuario': usuario})
-
-@csrf_exempt
-def registrarse(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    return render(request, 'registrarse.html', {'usuario': usuario})
-
-def usuario_create(request):
-    if request.method == 'POST':
-        correo_electronico = request.POST.get('correo_electronico')
-        nombre = request.POST.get('nombre')
-        apellido_paterno = request.POST.get('apellido_paterno')
-        apellido_materno = request.POST.get('apellido_materno')
-        contraseña = request.POST.get('contraseña')
-        genero = request.POST.get('genero')
-
-        usuario = Usuarios(
-            correo_electronico=correo_electronico,
-            nombre=nombre,
-            apellido_paterno=apellido_paterno,
-            apellido_materno=apellido_materno,
-            contraseña=contraseña,
-            genero=genero
-        )
-        usuario.save()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+        obGenero =Genero.objects.get(id_genero = genero)
+        obj = cliente.objects.create( correo = correo,
+                                      nombre = nombre,
+                                      aparterno = apaterno,
+                                      amaterno = amaterno,
+                                      contraseña = contraseña,
+                                      id_genero = obGenero )
+        obj.save()
+        context={'mensaje':'registrado con exito'}
+        return render(request, 'registrarse.html', context)
     
 
-def usuario_update(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    if request.method == 'POST':
-        form = UsuariosForm(request.POST, instance=usuario)
-        if form.is_valid():
-            form.save()
-            return redirect('usuario_list')
+def menu(request):
+    request.session["usuario"]="scabrera"
+    usuario=request.session["usuario"]
+    context ={'usuario':usuario}
+    return render(request, 'Principal.html', context)
+
+@staff_member_required
+def admin(request):
+    admin = cliente.objects.all()
+    context={'admin': admin}
+    return render(request, 'admin.html', context)
+
+@staff_member_required
+def borrar_cliente(request, pk):
+    context={}
+    try:
+        borrar = cliente.objects.get(correo=pk)
+
+        borrar.delete()
+        mensaje="se ha borrado con exito"
+        borrar = cliente.objects.all()
+        context = {'borrar': borrar, 'mensaje':mensaje}
+        return render(request, 'admin.html', context)
+    except:
+        mensaje = "Error"
+        borrar = cliente.objects.all()
+        context = {'borrar': borrar, 'mensaje':mensaje}
+        return render(request, 'admin.html', context)
+
+def editar_cliente(request, pk):
+    if pk != "":
+        editar=cliente.objects.get(correo=pk)
+        generos=Genero.objects.all()
+
+        print(type(editar.id_genero.genero))
+
+        context={'editar':editar, 'generos':generos}
+        if editar:
+            return render(request, 'editar_clientes.html', context)
+        else:
+            context={'mensaje':"error al editar"}
+            return render(request, 'admin.html', context)
+        
+def editarClientes(request):
+    if request.method=='POST':
+        correo=request.POST["correo"]
+        nombre=request.POST["nombre"]
+        aparterno=request.POST["aparterno"]
+        amaterno=request.POST["amaterno"]
+        contraseña=request.POST["contraseña"]
+        genero = request.POST["genero"]
+
+        objGenero = Genero.objects.get(id_genero = genero)
+        
+        editar = cliente()
+        editar.correo=correo
+        editar.nombre=nombre
+        editar.aparterno=aparterno
+        editar.amaterno=amaterno
+        editar.contraseña=contraseña
+        editar.id_genero=objGenero
+        editar.save()
+
+        generos =Genero.objects.all()
+        context={'mensaje':"datos editados", 'generos':generos, 'editar':editar}
+        return render(request, 'admin.html', context)
+
     else:
-        form = UsuariosForm(instance=usuario)
-    return render(request, 'usuario_form.html', {'form': form})
-
-def usuario_delete(request, pk):
-    usuario = get_object_or_404(Usuarios, pk=pk)
-    if request.method == 'POST':
-        usuario.delete()
-        return redirect('usuario_list')
-    return render(request, 'usuario_confirm_delete.html', {'usuario': usuario})
-
-@csrf_exempt
-def login_view(request):
-    if request.method == 'POST':
-        correo_electronico1 = request.POST.get('correo_electronico')
-        password = request.POST.get('password')
-
-        try:
-            usuario = Usuarios.objects.get(correo_electronico=correo_electronico1)
-        except Usuarios.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'El correo electrónico no está registrado.'})
-
-        if usuario:
-            if usuario.contraseña == password:
-                # Autenticación manual (no usando authenticate de Django)
-                #login(request, usuario)
-                return JsonResponse({'success': True, 'usuario': usuario.id})
-            else:
-                return JsonResponse({'success': False, 'error': 'Contraseña incorrecta.'})
-
-    return JsonResponse({'success': False, 'error': 'Método de solicitud inválido.'})
+        clientesEdita = cliente.objects.all()
+        context={'editar':clientesEdita}
+        return render(request, 'admin.html', context)
